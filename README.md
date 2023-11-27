@@ -1,5 +1,5 @@
 # HWAlarm - v1.0
-A simple Homework Alarm program I made in Python. Does everything you'd expect of a task list.
+A simple Homework Alarm program I made in Python. Does everything (well, most things) you'd expect of a task list. **It probably won't work in anything other than Windows**
 
 **This is still in development with minimal features. As of now, you need to manually remove tasks once you want to clear them.**
 ## Dependencies
@@ -12,4 +12,4 @@ A simple Homework Alarm program I made in Python. Does everything you'd expect o
       - *Left-click* to add homework/task
       - *Right-click* to remove homework/task
       - Scroll using mouse wheels
-
+  2. Once there is an upcoming task (i.e. due in less than 12 hours), the window will start flashing in the taskbar.
