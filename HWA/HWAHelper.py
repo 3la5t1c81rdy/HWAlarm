@@ -4,28 +4,30 @@ import time as t
 import pygame
 import ctypes
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('HWA v1.0')
+DISP_WIDTH, DISP_HEIGHT = 500,500
 
-def convert_weekday(wday):
+def convert_weekday(wday) -> str:
     if (wday < 0) or (wday > 6):
         return None
     return ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][wday]
 class Task:
-    def __init__(self, name: str, tasktime: t.struct_time, course = None):
+    def __init__(self, name: str, tasktime: t.struct_time, course = None) -> None:
+        #Fields of inst. of Task are public
         self.name = name
         self.tasktime = tasktime
         self.course = course
     
-    def __str__(self):
+    def __str__(self) -> str:
         return f"*{self.name}*\n for {self.course}, due {convert_weekday(self.tasktime[6])}, {self.tasktime[0]}/{self.tasktime[1]}/{self.tasktime[2]} {self.tasktime[3]}'o clock"
     
 
-class Alert:
-    def __init__(self, alarm):
+class Alert: ## a class for which an instance is dedicated to inherit "close-to-duedate" (and uncleared overdue) tasks (and "flash orange")
+    def __init__(self, alarm) -> None:
         self.upcoming = []#(task,*-1,0,1,2,3*)] <- -1: !!!OVERDUE!!!, 0: due in less than 1hr, 1: due in 3 hours, 2: due in 12 hours, 3: due in 1 day, 4: due in 3 days
         self.upcoming_raw = []#only stores task
         self.alarm = alarm
         self.dnd = False
-    def update_alert(self):
+    def update_alert(self) -> None:
         print("update in progress..")
         currt = t.time()
         for i in self.alarm.task_list:
@@ -56,7 +58,7 @@ class Alert:
         print("updated")
         #print(self.alarm.task_list,self.upcoming)
 class Alarm_window:
-    def __init__(self, setupTuple: tuple):
+    def __init__(self, setupTuple: tuple) -> None:
         self.disp = setupTuple[0]
         self.hwnd = setupTuple[1]
         self.screen_top_y = 0 #stores the vertical scroll
@@ -64,17 +66,20 @@ class Alarm_window:
         self.task_list = []
         self.font = pygame.font.Font("HWA_resources/Roboto-Medium.ttf", 20)
         self.lineht = self.font.size("g")[1]
-    def __str__(self):
+    def __str__(self) -> str:
         return_str = "{\n"
         ind = 0
         for task in self.task_list:
             return_str += str(task) + "\n ^ at index "+str(ind)+"\n,\n"
             ind += 1
         return return_str[:-2]+"\n}"
-    def add_task(self):
-        #WIP: you should add task according to the time order.
+    def clear(self) -> None:
+        self.disp.fill((240,240,240))
+    def add_task(self) -> None:
         try:
-            a, b, c = input("Enter the name of the new task: "),t.strptime(input("Enter the due date in this form - YYYY/MM/DD hh (24-hr-format): "), "%Y/%m/%d %H"), input("Enter the class name: ")
+            a = input("Enter the name of the new task (to cancel, type cancel): ")
+            assert(a != "cancel")
+            b, c = t.strptime(input("Enter the due date in this form - YYYY/MM/DD hh (24-hr-format): "), "%Y/%m/%d %H"), input("Enter the class name: ")
             ind = 0
             for i in range(len(self.task_list)):
                 if self.task_list[i].tasktime > b:
@@ -83,9 +88,9 @@ class Alarm_window:
             self.task_list.insert(ind,Task(a,b,c))
         except:
             print("Something went wrong.")
-            if input("Press enter to try again. Type anything to stop.") == "":
+            if input("Press enter to try again. Type anything to stop/cancel.") == "":
                 self.add_task()
-    def remove_task(self):
+    def remove_task(self) -> None:
         print(self)
         if len(self.task_list) > 0:
             try:
@@ -94,11 +99,11 @@ class Alarm_window:
                     self.task_list.pop(tsk_index)
             except:
                 print("Something went wrong.")
-                if input("Press enter to try again. Type anything to stop.") == "":
+                if input("Press enter to try again. Type anything to stop/cancel.") == "":
                     self.remove_task()
         else:
             print("Homework list is already cleared!")
-    def update_alarm(self):
+    def update_alarm(self) -> None:
         #draw all current alarm 
         curr_y = 0
         max_x, max_y = pygame.display.get_window_size()
@@ -129,7 +134,7 @@ class Alarm_window:
             curr_y += self.lineht
         
         self.max_y = l_count*self.lineht
-    def scroll_line(self,up_or_down: bool):
+    def scroll_line(self,up_or_down: bool) -> None:
         if up_or_down:
             #up
             self.screen_top_y = max(0,self.screen_top_y - self.lineht)
@@ -137,11 +142,16 @@ class Alarm_window:
             #down
             self.screen_top_y = max(0, min(self.max_y - pygame.display.get_window_size()[1],self.screen_top_y + self.lineht))
         print(self.screen_top_y, self.max_y)
-def setup():
+    def get_num_tasks(self) -> int:
+        return len(self.task_list)
+    def splash_nullscreen(self) -> None:
+        splash = self.font.render("To get started, left click this display.", True, (50,50,50))
+        self.disp.blit(splash, ((self.disp.get_width() - splash.get_width())//2,(self.disp.get_height() - splash.get_height())//2))
+def setup() -> (pygame.Surface, int):
     pygame.init()
     pygame.display.set_icon(pygame.image.load("HWA_resources/HWA_icon.png"))
     pygame.display.set_caption("HWAlarm v1.0")
-    w = pygame.display.set_mode((500,500), pygame.RESIZABLE)
+    w = pygame.display.set_mode((DISP_WIDTH,DISP_HEIGHT), pygame.RESIZABLE)
     hwnd = pygame.display.get_wm_info()['window']
     return (w, hwnd)
 
@@ -157,5 +167,5 @@ def add_linebreak(font: pygame.font.Font, text, disp_width) -> str:
             if curr_size > disp_width:
                 #split at i; [0:i] and [i:]
                 return text[:i] + "\n" + add_linebreak(font, text[i:], disp_width)
-def flash(hwnd):
+def flash(hwnd) -> None:
     win32gui.FlashWindowEx(hwnd, win32con.FLASHW_ALL | win32con.FLASHW_TIMERNOFG, 1, 0)
