@@ -1,13 +1,3 @@
-
-
-"""
-print(t.localtime())
-samplet = t.strptime("2023 12 15 12 0 0", "%Y %m %d %H %M %S")
-print(t.strftime("%m/%d/%Y %H(/24):%M:%S",samplet))
-print(t.mktime(samplet))
-print(t.time())
-print(t.localtime(t.time() + 3600))
-"""
 from HWAHelper import *
 if __name__ == '__main__':
     HWAlarm = Alarm_window(setup())
@@ -15,7 +5,6 @@ if __name__ == '__main__':
     tstamp = 0
     c = pygame.time.Clock()
     while True:
-        HWAlarm.clear()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -30,13 +19,20 @@ if __name__ == '__main__':
                 elif event.button == 5:
                     #down
                     HWAlarm.scroll_line(False)
-                
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    HWAlarm.text_info("Left click to add task.\nRight click to remove task.\nYou can use mouse scroll to maneuver between task list.")
+        
+        
+        HWAlarm.clear()
+        
+        
         if t.time() - tstamp > 5:
             tstamp = t.time()
             HWAlert.update_alert()
         HWAlarm.update_alarm()
         if HWAlarm.get_num_tasks() == 0:
             HWAlarm.splash_nullscreen()
-        
         pygame.display.flip()
         c.tick(20)
+    quit(0)
