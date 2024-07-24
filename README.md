@@ -6,7 +6,7 @@ A simple Homework Alarm program I made in Python. Does everything (well, most th
   - Pygame
   - PyWin32 (with all its modules correctly installed)
   - Time (Standard Library)
-  - (ctypes)
+  - ctypes (Standard Library)
 
 ## How to use
   1. Running the HWAlarm.py will open a new window.
