@@ -1,6 +1,12 @@
 from HWAHelper import *
 if __name__ == '__main__':
-    HWAlarm = Alarm_window(setup())
+    if len(sys.argv) > 1:
+        if os.path.isfile(sys.argv[1]):
+            HWAlarm = Alarm_window(setup(), sys.argv[1])
+        elif os.path.isfile(sys.argv[1] + ".hwa"):
+            HWAlarm = Alarm_window(setup(), sys.argv[1]+".hwa")
+    else:
+        HWAlarm = Alarm_window(setup())
     HWAlert = Alert(HWAlarm)
     tstamp = 0
     c = pygame.time.Clock()
