@@ -21,7 +21,8 @@ if __name__ == '__main__':
                     HWAlarm.scroll_line(False)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    HWAlarm.text_info("Left click to add task.\nRight click to remove task.\nYou can use mouse scroll to maneuver between task list.\nPress \"f\" key to change display font.")
+                    #:UPDATE
+                    HWAlarm.text_info("Left click to add task.\nRight click to remove task.\nYou can use mouse scroll to maneuver between task list.\nPress \"f\" key to change display font.\n\"c\" to change save, \"s\" to manually save, \"o\" to open, a local save of HWAlarm.", window_size = HWAlarm.disp.get_size())
                 if event.key == pygame.K_f:
                     HWAlarm.change_font()
                 ##
