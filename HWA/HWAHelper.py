@@ -6,7 +6,7 @@ import ctypes
 import os
 import sys
 #:UPDATE (did you fix the self.saveinfo, if applicable?) Change the version below!
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('HWAlarm v0.3')
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('HWAlarm v1.0')
 DISP_WIDTH, DISP_HEIGHT = 500,500
 
 def convert_weekday(wday) -> str:
@@ -507,7 +507,7 @@ def setup() -> (pygame.Surface, int):
     pygame.init()
     pygame.display.set_icon(pygame.image.load("HWA_resources/HWA_icon.png"))
     #:UPDATE (look below)
-    pygame.display.set_caption("HWAlarm v0.3")
+    pygame.display.set_caption("HWAlarm v1.0")
     w = pygame.display.set_mode((DISP_WIDTH,DISP_HEIGHT), pygame.RESIZABLE)
     hwnd = pygame.display.get_wm_info()['window']
     return (w, hwnd)
