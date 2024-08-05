@@ -1,13 +1,19 @@
 from HWAHelper import *
 if __name__ == '__main__':
-    HWAlarm = Alarm_window(setup())
+    if len(sys.argv) > 1:
+        if os.path.isfile(sys.argv[1]):
+            HWAlarm = Alarm_window(setup(), sys.argv[1])
+        elif os.path.isfile(sys.argv[1] + ".hwa"):
+            HWAlarm = Alarm_window(setup(), sys.argv[1]+".hwa")
+    else:
+        HWAlarm = Alarm_window(setup())
     HWAlert = Alert(HWAlarm)
     tstamp = 0
     c = pygame.time.Clock()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit()
+                HWAlarm.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     HWAlarm.add_task()
@@ -21,9 +27,19 @@ if __name__ == '__main__':
                     HWAlarm.scroll_line(False)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    HWAlarm.text_info("Left click to add task.\nRight click to remove task.\nYou can use mouse scroll to maneuver between task list.")
-        
-        
+                    #:UPDATE
+                    HWAlarm.text_info("Left click to add task.\nRight click to remove task.\nYou can use mouse scroll to maneuver between task list.\nPress \"f\" key to change display font.\n\"c\" to change save, \"s\" to manually save, \"o\" to open, a local save of HWAlarm.", window_size = HWAlarm.disp.get_size())
+                if event.key == pygame.K_f:
+                    HWAlarm.change_font()
+                ##
+                if event.key == pygame.K_c:
+                    HWAlarm.change_save()
+                if event.key == pygame.K_s:
+                    HWAlarm.save()
+                if event.key == pygame.K_o:
+                    HWAlarm = HWAlarm.open_new()
+                    HWAlert = Alert(HWAlarm)
+                    
         HWAlarm.clear()
         
         
@@ -35,4 +51,4 @@ if __name__ == '__main__':
             HWAlarm.splash_nullscreen()
         pygame.display.flip()
         c.tick(20)
-    quit(0)
+    sys.exit()
