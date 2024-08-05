@@ -122,6 +122,8 @@ class Alarm_window:
                 self.save_location = save_file
                 self.lineht = self.font.get_linesize()
                 self.text_info("The save was successfully loaded.\nPress any key to continue.", window_size = self.disp.get_size())
+            except SystemExit:
+                sys.exit()
             except:
                 #oof
                 self.task_list = [] #ensure nothing gets changed
@@ -160,6 +162,8 @@ class Alarm_window:
                     break
                 ind += 1
             self.task_list.insert(ind,Task(a,b,c))
+        except SystemExit:
+            sys.exit()
         except:
             if a.lower() != "":
                 if self.text_input("Something went wrong.\n\nPress enter to try again. Type anything to stop/cancel.") == "":
@@ -170,6 +174,8 @@ class Alarm_window:
                 tsk_index = int(self.text_input(f"Select the index of the task to remove (0 to {len(self.task_list) - 1}): "))
                 if self.text_input(f"Are you sure you want to clear:\n\"{self.task_list[tsk_index]}\"\n? If so, type enter. If not, type anything else then press enter.") == "":
                     self.task_list.pop(tsk_index)
+            except SystemExit:
+                sys.exit()
             except:
                 if self.text_input("Something went wrong.\n\nPress enter to try again. Type anything to stop/cancel.") == "":
                     self.remove_task()
@@ -341,6 +347,8 @@ class Alarm_window:
                                 return (0, None)
                             pygame.font.SysFont(i, 20)
                             return (1, i)
+                        except SystemExit:
+                            sys.exit()
                         except:
                             f = True
                     else:
@@ -355,6 +363,8 @@ class Alarm_window:
                                 return (0, None)
                             pygame.font.Font(i, 20)
                             return (1, i)
+                        except SystemExit:
+                            sys.exit()
                         except:
                             f = True
                     else:
@@ -381,6 +391,8 @@ class Alarm_window:
                             return (1, pygame.font.SysFont(fontstr, i), i)
                         else:
                             return (1, pygame.font.Font(fontstr, i), i)
+                    except SystemExit:
+                        sys.exit()
                     except:
                         f = True
                 else:
@@ -467,6 +479,8 @@ class Alarm_window:
                 with open(save_location, "x") as f:
                     print(self, end = "", file = f)
             f.close()
+        except SystemExit:
+            sys.exit()
         except:
             return 0
         return 1
