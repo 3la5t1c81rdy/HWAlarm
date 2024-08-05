@@ -1,4 +1,4 @@
-# HWAlarm - v0.3
+# HWAlarm - v1.0
 A simple Homework Alarm program I made in Python. Does everything (well, most things) you'd expect of a task list. **It probably won't work in any OS other than Windows but always welcome to try**
 
 **This is still in development with minimal features. As of now, you need to manually remove tasks once you want to clear them.**
